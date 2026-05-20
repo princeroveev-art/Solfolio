@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DESIGN TOKENS — Edit here to restyle the entire product.
+   ============================================================ */
+:root {
+  --font-syne: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  /* Brand (10% accent) — teal as primary */
+  --color-brand:       hsl(173, 80%, 40%);
+  --color-brand-light: hsl(173, 80%, 14%);
+  --color-brand-dark:  hsl(173, 80%, 28%);
+
+  /* Accent — cyber purple, used sparingly */
+  --color-accent:      hsl(290, 70%, 58%);
+  --color-accent-light: hsl(290, 70%, 14%);
+
+  /* Surfaces — deep void dark theme */
+  --color-canvas:   hsl(230, 40%, 4%);    /* Page bg (60%) */
+  --color-surface:  hsl(230, 35%, 7%);    /* Card surface (30%) */
+  --color-overlay:  hsl(230, 30%, 10%);   /* Elevated panel */
+  --color-hover:    hsl(230, 28%, 13%);   /* Hover state */
+
+  /* Text */
+  --color-text-primary:   hsl(210, 20%, 96%);
+  --color-text-secondary: hsl(210, 12%, 64%);
+  --color-text-muted:     hsl(210, 10%, 40%);
+
+  /* Borders — must be visible */
+  --color-border:        hsl(230, 20%, 16%);   /* Default — clearly visible on dark bg */
+  --color-border-strong: hsl(230, 20%, 24%);   /* Hover / emphasis */
+  --color-border-brand:  hsl(173, 50%, 22%);   /* Brand-tinted border */
+
+  /* Semantic */
+  --color-success: hsl(152, 60%, 44%);
+  --color-danger:  hsl(0, 70%, 56%);
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-brand: 0 0 24px rgba(20, 184, 166, 0.18);
+
+  /* Border radius */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   18px;
+  --radius-2xl:  24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-base: 180ms ease;
+  --transition-slow: 320ms ease;
+
+  /* Type scale */
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   17px;
+  --text-lg:   20px;
+  --text-xl:   24px;
+  --text-2xl:  30px;
+  --text-3xl:  40px;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  ::selection {
+    background: rgba(20, 184, 166, 0.25);
+    color: hsl(173, 80%, 80%);
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-canvas);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-strong);
+    border-radius: var(--radius-full);
+  }
+
+  /* Global interaction transitions */
+  button, a, [role="button"] {
+    transition:
+      color          var(--transition-base),
+      background-color var(--transition-base),
+      border-color   var(--transition-base),
+      box-shadow     var(--transition-base),
+      transform      var(--transition-base),
+      opacity        var(--transition-base);
+  }
+}
+
+@layer components {
+
+  /* ── Card surface ── */
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border-strong);
+    transform: translateY(-2px);
+  }
+
+  /* ── Glass overlay for navbar/floating elements ── */
+  .glass {
+    background: rgba(7, 8, 20, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+  }
+
+  /* ── Subtle radial glow behind hero card ── */
+  .glow-teal {
+    box-shadow: var(--shadow-brand);
+  }
+
+  /* ── Branded gradient text — 2 hues only, within 40deg ── */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(173, 80%, 58%) 0%, hsl(210, 80%, 68%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    background-color: var(--color-brand);
+    color: hsl(230, 40%, 6%);
+    border: 1px solid transparent;
+    cursor: pointer;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .btn-primary:hover {
+    background-color: hsl(173, 80%, 46%);
+    box-shadow: var(--shadow-brand);
+    transform: scale(1.01);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--color-hover);
+    border-color: var(--color-border-strong);
+    color: var(--color-text-primary);
+  }
+
+  /* ── Tags / badges ── */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background-color: var(--color-brand-light);
+    color: hsl(173, 70%, 58%);
+    border: 1px solid var(--color-border-brand);
+  }
+
+  .tag-accent {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background-color: var(--color-accent-light);
+    color: hsl(290, 70%, 72%);
+    border: 1px solid hsl(290, 50%, 24%);
+  }
+
+  .tag-muted {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    background-color: var(--color-overlay);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  /* ── Stat value ── */
+  .stat-value {
+    font-family: var(--font-syne);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Progress bar track ── */
+  .progress-track {
+    height: 4px;
+    background-color: var(--color-overlay);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: linear-gradient(90deg, var(--color-brand), hsl(210, 80%, 60%));
+    transition: width 700ms ease;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* ── Loading skeleton ── */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-overlay) 25%,
+      var(--color-hover) 50%,
+      var(--color-overlay) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease infinite;
+    border-radius: var(--radius-sm);
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+/* ── Keyframes ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-float    { animation: float 6s ease-in-out infinite; }
+.animate-fade-up  { animation: fadeInUp 0.5s ease-out forwards; }
+.animate-spin     { animation: spin 0.8s linear infinite; }
+
+/* Wallet adapter overrides */
+.wallet-adapter-button {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  font-family: inherit !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background: var(--color-surface) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.wallet-adapter-modal-title {
+  font-family: var(--font-syne) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.wallet-adapter-modal-list li {
+  background-color: var(--color-overlay) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  margin-bottom: 8px !important;
+}
+
+.wallet-adapter-modal-list li:hover {
+  background-color: var(--color-hover) !important;
+  border-color: var(--color-border-strong) !important;
+}
+
+.wallet-adapter-modal-list-more {
+  color: hsl(173, 70%, 58%) !important;
+}
+
+/* Footer links */
+footer a:hover {
+  color: var(--color-brand) !important;
+}
