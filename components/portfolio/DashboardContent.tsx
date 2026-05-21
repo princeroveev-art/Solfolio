@@ -82,7 +82,7 @@ export function DashboardContent() {
 
   const [solBalance, setSolBalance] = useState<number>(0);
   const [tokens, setTokens] = useState<Array<{ mint: string; amount: number; decimals: number; address: string; name: string; symbol: string; price: number; color: string; usdValue: number }>>([]);
-  const [transactions, setTransactions] = useState<Array<{ signature: string; slot: number; blockTime: number | null | undefined; err: object | null; memo: string | null | undefined }>>([]);
+  const [transactions, setTransactions] = useState<Array<{ signature: string; slot: number; blockTime: number | null | undefined; err: unknown; memo: string | null | undefined }>>([]);
   const [grindScore, setGrindScore] = useState<GrindScoreData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -135,7 +135,28 @@ export function DashboardContent() {
     fetchData();
   }, [publicKey, connected, connection]);
 
-  if (!connected) {
+
+  const totalUSD = solBalance * SOL_PRICE + tokens.reduce((s, t) => s + t.usdValue, 0);
+
+  const agentReport = useMemo(() => {
+    const allAssets: PortfolioAsset[] = [
+      { symbol: "SOL", usdValue: solBalance * SOL_PRICE, allocationPct: 0, volatilityBand: "medium" },
+      ...tokens.map((t) => ({
+        symbol: t.symbol,
+        usdValue: t.usdValue,
+        allocationPct: 0,
+        volatilityBand: t.symbol === "USDC" || t.symbol === "USDT" ? "low" as const : "high" as const,
+      })),
+    ];
+
+    const total = allAssets.reduce((sum, a) => sum + a.usdValue, 0);
+    const normalized = allAssets.map((a) => ({ ...a, allocationPct: total > 0 ? (a.usdValue / total) * 100 : 0 }));
+    return generateAgentReport(normalized, transactions.length);
+  }, [solBalance, tokens, transactions.length]);
+
+  const isDisconnected = !connected;
+
+  if (isDisconnected) {
     return (
       <div
         style={{
@@ -172,30 +193,11 @@ export function DashboardContent() {
     );
   }
 
-  const totalUSD = solBalance * SOL_PRICE + tokens.reduce((s, t) => s + t.usdValue, 0);
-
-
-  const agentReport = useMemo(() => {
-    const allAssets: PortfolioAsset[] = [
-      { symbol: "SOL", usdValue: solBalance * SOL_PRICE, allocationPct: 0, volatilityBand: "medium" },
-      ...tokens.map((t) => ({
-        symbol: t.symbol,
-        usdValue: t.usdValue,
-        allocationPct: 0,
-        volatilityBand: t.symbol === "USDC" || t.symbol === "USDT" ? "low" as const : "high" as const,
-      })),
-    ];
-
-    const total = allAssets.reduce((sum, a) => sum + a.usdValue, 0);
-    const normalized = allAssets.map((a) => ({ ...a, allocationPct: total > 0 ? (a.usdValue / total) * 100 : 0 }));
-    return generateAgentReport(normalized, transactions.length);
-  }, [solBalance, tokens, transactions.length]);
-
   const statCards = [
-    { label: "Total Portfolio", value: loading ? "—" : formatUSD(totalUSD), sub: "USD value",    Icon: BriefcaseIcon, highlight: true },
-    { label: "SOL Balance",     value: loading ? "—" : `${solBalance.toFixed(3)} SOL`, sub: loading ? "" : formatUSD(solBalance * SOL_PRICE), Icon: SolIcon },
-    { label: "Token Types",     value: loading ? "—" : tokens.length.toString(), sub: "SPL tokens", Icon: LayersIcon },
-    { label: "Grind Score",     value: loading ? "—" : grindScore?.score.toString() || "0", sub: grindScore?.tier || "", Icon: ZapIcon },
+    { label: "Total Portfolio Value", value: loading ? null : formatUSD(totalUSD), sub: "Net wallet value", Icon: BriefcaseIcon, highlight: true },
+    { label: "SOL Position", value: loading ? null : `${solBalance.toFixed(3)} SOL`, sub: loading ? "" : formatUSD(solBalance * SOL_PRICE), Icon: SolIcon },
+    { label: "Tracked Assets", value: loading ? null : tokens.length.toString(), sub: "SPL tokens", Icon: LayersIcon },
+    { label: "Grind Score", value: loading ? null : grindScore?.score.toString() || "0", sub: grindScore?.tier || "", Icon: ZapIcon },
   ];
 
   return (
@@ -338,18 +340,22 @@ export function DashboardContent() {
                 <stat.Icon />
               </div>
             </div>
-            <p
-              style={{
-                fontFamily: "var(--font-syne)",
-                fontSize: "var(--text-xl)",
-                fontWeight: 800,
-                color: "var(--color-text-primary)",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {stat.value}
-            </p>
-            {stat.sub && (
+            {loading ? (
+              <div className="skeleton" style={{height:28,width:"70%"}} />
+            ) : (
+              <p
+                style={{
+                  fontFamily: "var(--font-syne)",
+                  fontSize: "var(--text-xl)",
+                  fontWeight: 800,
+                  color: "var(--color-text-primary)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {stat.value ?? ""}
+              </p>
+            )}
+            {loading ? <div className="skeleton" style={{height:12,width:"45%",marginTop:8}} /> : stat.sub && (
               <p style={{ color: "var(--color-text-muted)", fontSize: "var(--text-xs)", marginTop: "3px" }}>
                 {stat.sub}
               </p>

@@ -1,43 +1,23 @@
 "use client";
 
-import React, { FC, ReactNode, useMemo } from "react";
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from "@solana/wallet-adapter-react";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { ReactNode, useMemo } from "react";
+import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import { clusterApiUrl } from "@solana/web3.js";
 
-// Import the default wallet adapter styles
 require("@solana/wallet-adapter-react-ui/styles.css");
 
-interface WalletProvidersProps {
-  children: ReactNode;
-}
+export function WalletProviders({ children }: { children: ReactNode }) {
+  const endpoint = useMemo(() => process.env.NEXT_PUBLIC_RPC_URL ?? "http://127.0.0.1:8899", []);
 
-export const WalletProviders: FC<WalletProvidersProps> = ({ children }) => {
-  const network = WalletAdapterNetwork.Mainnet;
-  const endpoint = useMemo(
-    () =>
-      process.env.NEXT_PUBLIC_RPC_URL ||
-      "https://api.mainnet-beta.solana.com",
-    []
-  );
-
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter(),
-    ],
-    []
-  );
+  const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
+    // @ts-expect-error wallet adapter typing mismatch with current React type package
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>{children}</WalletModalProvider>
+          <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
-};
+}

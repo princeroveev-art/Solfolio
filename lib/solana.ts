@@ -1,62 +1,67 @@
 import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
 
-const RPC_URL =
-  process.env.NEXT_PUBLIC_RPC_URL || "https://api.mainnet-beta.solana.com";
+const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL;
 
-export const connection = new Connection(RPC_URL, "confirmed");
+export const connection = RPC_URL ? new Connection(RPC_URL, "confirmed") : null;
 
-export async function getSolBalance(publicKey: PublicKey, activeConnection: Connection = connection): Promise<number> {
-  const balance = await activeConnection.getBalance(publicKey);
-  return balance / LAMPORTS_PER_SOL;
+function requireConnection(activeConnection?: Connection): Connection {
+  if (activeConnection) return activeConnection;
+  if (!connection) throw new Error("Missing NEXT_PUBLIC_RPC_URL. Please define it in your environment.");
+  return connection;
 }
 
-export async function getTokenAccounts(publicKey: PublicKey, activeConnection: Connection = connection) {
-  const tokenAccounts = await activeConnection.getParsedTokenAccountsByOwner(
-    publicKey,
-    { programId: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") }
-  );
-
-  return tokenAccounts.value
-    .map((account) => {
-      const info = account.account.data.parsed.info;
-      return {
-        mint: info.mint as string,
-        amount: Number(info.tokenAmount.uiAmount || 0),
-        decimals: info.tokenAmount.decimals as number,
-        address: account.pubkey.toBase58(),
-      };
-    })
-    .filter((t) => t.amount > 0);
+function toErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "Unknown RPC error";
 }
 
-export async function getRecentTransactions(publicKey: PublicKey, limit = 10, activeConnection: Connection = connection) {
-  const signatures = await activeConnection.getSignaturesForAddress(publicKey, {
-    limit,
-  });
-
-  return signatures.map((sig) => ({
-    signature: sig.signature,
-    slot: sig.slot,
-    blockTime: sig.blockTime,
-    err: sig.err,
-    memo: sig.memo,
-  }));
+export async function getSolBalance(publicKey: PublicKey, activeConnection?: Connection): Promise<number> {
+  try {
+    const conn = requireConnection(activeConnection);
+    const balance = await conn.getBalance(publicKey);
+    return balance / LAMPORTS_PER_SOL;
+  } catch (error) {
+    throw new Error(`Failed to fetch SOL balance: ${toErrorMessage(error)}`);
+  }
 }
 
-// Mock token price lookup - in production, use Jupiter or Birdeye API
-export async function getMockTokenPrices(): Promise<Record<string, number>> {
-  return {
-    SOL: 172.4,
-    USDC: 1.0,
-    USDT: 1.0,
-    JUP: 1.82,
-    BONK: 0.000024,
-    WIF: 2.14,
-    PYTH: 0.38,
-    JTO: 2.95,
-    ORCA: 3.12,
-    RAY: 2.87,
-  };
+export async function getTokenAccounts(publicKey: PublicKey, activeConnection?: Connection) {
+  try {
+    const conn = requireConnection(activeConnection);
+    const tokenAccounts = await conn.getParsedTokenAccountsByOwner(publicKey, {
+      programId: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"),
+    });
+
+    return tokenAccounts.value
+      .map((account) => {
+        const info = account.account.data.parsed.info;
+        return {
+          mint: info.mint as string,
+          amount: Number(info.tokenAmount.uiAmount || 0),
+          decimals: info.tokenAmount.decimals as number,
+          address: account.pubkey.toBase58(),
+        };
+      })
+      .filter((t) => t.amount > 0);
+  } catch (error) {
+    throw new Error(`Failed to fetch token accounts: ${toErrorMessage(error)}`);
+  }
+}
+
+export async function getRecentTransactions(publicKey: PublicKey, limit = 10, activeConnection?: Connection) {
+  try {
+    const conn = requireConnection(activeConnection);
+    const signatures = await conn.getSignaturesForAddress(publicKey, { limit });
+
+    return signatures.map((sig) => ({
+      signature: sig.signature,
+      slot: sig.slot,
+      blockTime: sig.blockTime,
+      err: sig.err,
+      memo: sig.memo,
+    }));
+  } catch (error) {
+    throw new Error(`Failed to fetch recent transactions: ${toErrorMessage(error)}`);
+  }
 }
 
 export function shortenAddress(address: string, chars = 4): string {

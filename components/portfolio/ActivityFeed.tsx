@@ -6,7 +6,7 @@ interface Transaction {
   signature: string;
   slot: number;
   blockTime: number | null | undefined;
-  err: object | null;
+  err: unknown;
   memo: string | null | undefined;
 }
 
