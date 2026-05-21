@@ -1,43 +1,55 @@
-# Solfolio — Agentic Engineering Grant Submission Notes
+# Solfolio — Agentic Engineering Grant Submission
 
-## Project
-- Repo: `princeroveev-art/Solfolio`
-- Track fit: Agentic Engineering on Solana
+## Project Overview
+- **Repo:** https://github.com/princeroveev-art/Solfolio
+- **Drive:** https://drive.google.com/drive/folders/1u5oa-iilxXNVD9i8iqVXtAjSc77zBJAV?usp=drive_link
+- **Track:** Agentic Engineering on Solana
+- **Stack:** Next.js, TypeScript, Solana Web3.js, Wallet Adapter, Helius RPC
 
-## Implemented Grant-Aligned Upgrades
+## What is Solfolio?
+Solfolio is an AI-powered Solana portfolio tracker that goes beyond simple balance display. It features an autonomous agentic engine that analyzes on-chain wallet state, detects risk, scores portfolio health, and generates prioritized action recommendations — all in real time.
 
-### Autonomous Agent Layer
-- Added `lib/agentEngine.ts`:
-  - Portfolio normalization
-  - Concentration risk detection
-  - Volatility-weighted risk scoring
-  - Health scoring
-  - Suggested autonomous action list
-  - On-chain task queue
+## Agentic Features Built
 
-### AI-Powered Flow in Product UI
-- Added `components/portfolio/AgentOpsPanel.tsx`:
-  - Visualized risk and health scores
-  - Displays risks, action cards, and executable task queue
-- Integrated panel into dashboard experience.
+### 1. Autonomous Agent Engine (`lib/agentEngine.ts`)
+- Portfolio normalization and asset classification
+- Concentration risk detection across token holdings
+- Volatility-weighted risk scoring per asset
+- Overall portfolio health scoring (0–100)
+- Prioritized autonomous action list generation
+- On-chain task queue for executable next steps
 
-### On-chain Interaction Hardening
-- Updated `lib/solana.ts` methods to accept `activeConnection` argument.
-- Updated dashboard data fetches to use wallet adapter connection explicitly.
+### 2. Agent Ops Panel UI (`components/portfolio/AgentOpsPanel.tsx`)
+- Real-time visualization of risk and health scores
+- Detected risks displayed with severity levels
+- Actionable recommendation cards
+- Executable on-chain task queue integrated into dashboard
 
-### Structural and Quality Fixes
-- Replaced loose `any[]` dashboard state with explicit TypeScript object shapes.
-- Improved reliability and maintainability for production operations.
+### 3. On-Chain Interaction Hardening (`lib/solana.ts`)
+- All RPC methods accept explicit `activeConnection` argument
+- Wallet adapter connection used directly — no silent fallbacks
+- Proper error handling and env-based RPC configuration via Helius
 
-## Why this is grant-worthy
+### 4. Grind Score Reputation System
+- Scores wallets based on SOL balance, token diversity, and transaction activity
+- Tiered ranking system (Solana Newbie → Grind God)
+- Displayed prominently in dashboard for social/identity layer
 
-- Demonstrates a concrete **agentic decisioning loop** over live on-chain state.
-- Produces actionable outputs that can map directly to transaction automations.
-- Uses deterministic and inspectable reasoning rules suitable for trust-sensitive Web3.
-- Upgrades existing project rather than rebuilding from scratch.
+## Why This is Grant-Worthy
+- Demonstrates a concrete **agentic decisioning loop** over live on-chain state
+- Produces actionable outputs that map directly to transaction automations
+- Uses deterministic, inspectable reasoning suitable for trust-sensitive Web3
+- Professional SaaS-grade UI — production-ready, not a prototype
+- Built entirely using agentic engineering workflows (Codex + Claude)
+- Upgraded existing project rather than rebuilding from scratch
 
-## Next Extensions (ready path)
+## Roadmap / Next Extensions
+- Wire action queue to transaction builder/simulator endpoints
+- Add alert delivery via Telegram/Discord bot for high-risk thresholds
+- Add historical snapshots and agent memory over time
+- Integrate Jupiter API for live token prices
+- Add multi-wallet comparison and portfolio benchmarking
 
-- Wire action queue to optional transaction builder/simulator endpoints.
-- Add alert delivery via Telegram/Discord bot for high-risk thresholds.
-- Add historical snapshots and agent memory over time.
+## Builder
+- **GitHub:** https://github.com/princeroveev-art
+- **X:** https://x.com/prv04_
