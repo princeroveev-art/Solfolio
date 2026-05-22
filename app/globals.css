@@ -81,19 +81,19 @@ code, .mono, .wallet-address, .tx-hash {
   --font-body: 'Inter', 'SF Pro Text', 'Segoe UI', sans-serif;
 
   /* Brand (10% accent) — teal as primary */
-  --color-brand:       hsl(173, 80%, 40%);
-  --color-brand-light: hsl(173, 80%, 14%);
-  --color-brand-dark:  hsl(173, 80%, 28%);
+  --color-brand:       hsl(261, 90%, 66%);
+  --color-brand-light: hsl(257, 58%, 18%);
+  --color-brand-dark:  hsl(258, 66%, 40%);
 
   /* Accent — cyber purple, used sparingly */
-  --color-accent:      hsl(290, 70%, 58%);
-  --color-accent-light: hsl(290, 70%, 14%);
+  --color-accent:      hsl(205, 92%, 62%);
+  --color-accent-light: hsl(216, 66%, 14%);
 
   /* Surfaces — deep void dark theme */
-  --color-canvas:   hsl(230, 40%, 4%);    /* Page bg (60%) */
-  --color-surface:  hsl(230, 35%, 7%);    /* Card surface (30%) */
-  --color-overlay:  hsl(230, 30%, 10%);   /* Elevated panel */
-  --color-hover:    hsl(230, 28%, 13%);   /* Hover state */
+  --color-canvas:   hsl(238, 42%, 5%);    /* Page bg (60%) */
+  --color-surface:  hsl(238, 34%, 9%);    /* Card surface (30%) */
+  --color-overlay:  hsl(238, 30%, 12%);   /* Elevated panel */
+  --color-hover:    hsl(238, 26%, 16%);   /* Hover state */
 
   /* Text */
   --color-text-primary:   hsl(210, 20%, 96%);
@@ -114,7 +114,7 @@ code, .mono, .wallet-address, .tx-hash {
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.25);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
-  --shadow-brand: 0 0 24px rgba(20, 184, 166, 0.18);
+  --shadow-brand: 0 0 24px rgba(139, 92, 246, 0.30);
 
   /* Border radius */
   --radius-xs:   4px;
@@ -157,6 +157,17 @@ code, .mono, .wallet-address, .tx-hash {
     -webkit-font-smoothing: antialiased;
     font-feature-settings: "kern" 1, "liga" 1;
   }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(168, 85, 247, 0.18), transparent 35%),
+      radial-gradient(circle at 85% 25%, rgba(59, 130, 246, 0.16), transparent 38%),
+      radial-gradient(circle at 50% 100%, rgba(124, 58, 237, 0.14), transparent 45%);
+    z-index: -1;
+  }
 
   ::selection {
     background: rgba(20, 184, 166, 0.25);
@@ -192,10 +203,12 @@ code, .mono, .wallet-address, .tx-hash {
 
   /* ── Card surface ── */
   .card {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: linear-gradient(170deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+    border: 1px solid color-mix(in srgb, var(--color-border) 80%, rgba(255,255,255,0.2));
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     transition: box-shadow var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
   }
 
@@ -207,7 +220,7 @@ code, .mono, .wallet-address, .tx-hash {
 
   /* ── Glass overlay for navbar/floating elements ── */
   .glass {
-    background: rgba(7, 8, 20, 0.72);
+    background: rgba(10, 11, 30, 0.70);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-border);
@@ -220,7 +233,7 @@ code, .mono, .wallet-address, .tx-hash {
 
   /* ── Branded gradient text — 2 hues only, within 40deg ── */
   .gradient-text {
-    background: linear-gradient(135deg, hsl(173, 80%, 58%) 0%, hsl(210, 80%, 68%) 100%);
+    background: linear-gradient(135deg, hsl(266, 95%, 72%) 0%, hsl(206, 94%, 67%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -244,9 +257,22 @@ code, .mono, .wallet-address, .tx-hash {
   }
 
   .btn-primary:hover {
-    background-color: hsl(173, 80%, 46%);
+    background: linear-gradient(135deg, hsl(264, 94%, 69%), hsl(207, 94%, 64%));
     box-shadow: var(--shadow-brand);
     transform: scale(1.01);
+  }
+
+  .card-glow {
+    background: linear-gradient(160deg, rgba(17, 20, 48, 0.84), rgba(12, 14, 35, 0.84));
+    border: 1px solid rgba(136, 105, 255, 0.24);
+    box-shadow: 0 14px 45px rgba(6, 8, 24, 0.48), 0 0 34px rgba(124, 58, 237, 0.14);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .card-glow:hover {
+    border-color: rgba(146, 123, 255, 0.42);
+    box-shadow: 0 18px 52px rgba(6, 8, 24, 0.55), 0 0 38px rgba(59, 130, 246, 0.18);
   }
 
   .btn-primary:active {
