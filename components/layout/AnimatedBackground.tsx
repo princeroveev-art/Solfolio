@@ -14,14 +14,14 @@ export function AnimatedBackground() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Single-hue particles — teal only, consistent with design token
+    // Dual-tone particles for premium neon depth (subtle + performant)
     const particles: Array<{
       x: number; y: number;
       vx: number; vy: number;
       size: number; opacity: number;
     }> = [];
 
-    for (let i = 0; i < 45; i++) {
+    for (let i = 0; i < 38; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -47,9 +47,10 @@ export function AnimatedBackground() {
         if (p.y > canvas.height) p.y = 0;
 
         const alpha = Math.floor(p.opacity * 255).toString(16).padStart(2, "0");
+        const hue = i % 2 === 0 ? "a78bfa" : "60a5fa";
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `#14b8a6${alpha}`;
+        ctx.fillStyle = `#${hue}${alpha}`;
         ctx.fill();
 
         // Connect nearby — single color lines
@@ -61,7 +62,9 @@ export function AnimatedBackground() {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(20,184,166,${0.04 * (1 - dist / 110)})`;
+            ctx.strokeStyle = i % 2 === 0
+              ? `rgba(167,139,250,${0.035 * (1 - dist / 110)})`
+              : `rgba(96,165,250,${0.03 * (1 - dist / 110)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -92,29 +95,40 @@ export function AnimatedBackground() {
     >
       {/* Base canvas bg — handled by body in globals.css */}
 
-      {/* Subtle grid — single color, very low opacity */}
+      {/* Subtle grid texture */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          opacity: 0.012,
+          opacity: 0.014,
           backgroundImage:
-            "linear-gradient(rgba(20,184,166,1) 1px, transparent 1px), linear-gradient(90deg, rgba(20,184,166,1) 1px, transparent 1px)",
+            "linear-gradient(rgba(167,139,250,1) 1px, transparent 1px), linear-gradient(90deg, rgba(96,165,250,1) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         }}
       />
 
-      {/* Single radial glow — top center, teal only */}
+      {/* Soft cinematic glows */}
       <div
         style={{
           position: "absolute",
-          top: "-160px",
-          left: "50%",
+          top: "-170px",
+          left: "40%",
           transform: "translateX(-50%)",
-          width: "800px",
-          height: "600px",
-          opacity: 0.12,
-          background: "radial-gradient(ellipse, #14b8a6 0%, transparent 70%)",
+          width: "700px",
+          height: "560px",
+          opacity: 0.16,
+          background: "radial-gradient(ellipse, rgba(168,85,247,0.65) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "-120px",
+          right: "-180px",
+          width: "620px",
+          height: "460px",
+          opacity: 0.13,
+          background: "radial-gradient(ellipse, rgba(59,130,246,0.65) 0%, transparent 68%)",
         }}
       />
 

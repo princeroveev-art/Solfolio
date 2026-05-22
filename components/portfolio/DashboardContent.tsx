@@ -116,16 +116,7 @@ export function DashboardContent() {
   ];
 
   return (
-    <div
-      style={{
-        maxWidth: "1280px",
-        margin: "0 auto",
-        padding: "0 24px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "24px",
-      }}
-    >
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-5 sm:gap-6">
       {/* Page header */}
       <div
         style={{
@@ -218,14 +209,7 @@ export function DashboardContent() {
       )}
 
       {/* Stat cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "12px",
-        }}
-        className="lg:grid-cols-4"
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
         {statCards.map((stat) => (
           <div
             key={stat.label}
@@ -280,20 +264,13 @@ export function DashboardContent() {
       </div>
 
       {/* Main content grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: "20px",
-        }}
-        className="lg:grid-cols-3"
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }} className="lg:col-span-2">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6">
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }} className="xl:col-span-7">
           <TokenList tokens={tokens} solBalance={solBalance} solPrice={SOL_PRICE} loading={loading} />
           <ActivityFeed transactions={transactions} loading={loading} />
           <AgentOpsPanel report={agentReport} loading={loading} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }} className="xl:col-span-5">
           {grindScore && <GrindScoreCard data={grindScore} />}
           <NFTGrid loading={loading} />
         </div>

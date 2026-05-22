@@ -103,11 +103,11 @@ const features = [
 
 export function FeatureGrid() {
   return (
-    <section className="py-24 px-6" style={{ background: "var(--bg-primary)" }}>
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-20 sm:py-24 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
 
         {/* Section header */}
-        <div style={{ textAlign: "center", marginBottom: "56px" }}>
+        <div style={{ textAlign: "center", marginBottom: "50px" }}>
           <span className="tag" style={{ marginBottom: "16px", display: "inline-flex" }}>
             What Solfolio does
           </span>
@@ -125,19 +125,19 @@ export function FeatureGrid() {
             Everything about your{" "}
             <span className="gradient-text">on-chain life</span>
           </h2>
-          <p style={{ color: "var(--text-muted)", maxWidth: "420px", margin: "0 auto", fontSize: "1.25rem", lineHeight: 1.6 }}>
+          <p style={{ color: "var(--color-text-secondary)", maxWidth: "520px", margin: "0 auto", fontSize: "1.05rem", lineHeight: 1.7 }}>
             One platform. Full picture. AI that actually understands Solana.
           </p>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mt-12">
           {features.map((f) => {
             const tagClass = f.tagType === "brand" ? "pill pill-live" : f.tagType === "accent" ? "pill pill-ai" : "pill pill-soon";
             return (
               <div
                 key={f.title}
-                className="card-glow p-7"
+                className="card p-7"
                 style={{
                   padding: "24px",
                   display: "flex",
@@ -153,8 +153,8 @@ export function FeatureGrid() {
                       width: "40px",
                       height: "40px",
                       borderRadius: "var(--radius-sm)",
-                      background: "var(--color-overlay)",
-                      border: "1px solid var(--color-border)",
+                      background: "linear-gradient(150deg, rgba(139,92,246,0.16), rgba(59,130,246,0.12))",
+                      border: "1px solid rgba(139,92,246,0.35)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -202,36 +202,33 @@ export function StatsBar() {
   ];
 
   return (
-    <section style={{ padding: "64px 0", background: "var(--bg-secondary)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+    <section style={{ padding: "54px 0", background: "rgba(15,17,38,0.48)", borderTop: "1px solid var(--color-border)", borderBottom: "1px solid var(--color-border)" }}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-center items-center gap-12 flex-wrap">
           {stats.map((stat, i) => (
-            <>
+            <div key={stat.label} style={{ display: "flex", alignItems: "center", gap: "24px" }}>
             <div
-              key={stat.label}
               style={{
-                padding: "32px",
+                padding: "18px 8px",
                 textAlign: "center",
-                
               }}
-              
             >
               <p
                 style={{
                   
-                  color: "var(--text-primary)",
+                  color: "var(--color-text-primary)",
                   letterSpacing: "-0.03em",
                   marginBottom: "4px",
                 }}
               >
                 <span className="stat-number">{stat.value}</span>
               </p>
-              <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
+              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
                 {stat.label}
               </p>
             </div>
             {i < stats.length - 1 && <span style={{ width: "1px", height: "40px", background: "var(--border)" }} />}
-            </>
+            </div>
           ))}
         </div>
       </div>
