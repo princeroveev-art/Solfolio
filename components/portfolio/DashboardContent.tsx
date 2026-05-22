@@ -1,30 +1,15 @@
 "use client";
 
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { useEffect, useMemo, useState } from "react";
-import {
-  getSolBalance,
-  getTokenAccounts,
-  getRecentTransactions,
-  shortenAddress,
-  formatUSD
-} from "@/lib/solana";
-import { calculateGrindScore, GrindScoreData } from "@/lib/grindScore";
+import { shortenAddress, formatUSD } from "@/lib/solana";
 import { WalletButton } from "@/components/wallet/WalletButton";
 import { GrindScoreCard } from "@/components/portfolio/GrindScoreCard";
 import { TokenList } from "@/components/portfolio/TokenList";
 import { NFTGrid } from "@/components/portfolio/NFTGrid";
 import { ActivityFeed } from "@/components/portfolio/ActivityFeed";
 import { AgentOpsPanel } from "@/components/portfolio/AgentOpsPanel";
-import { generateAgentReport, PortfolioAsset } from "@/lib/agentEngine";
-
-const KNOWN_TOKENS: Record<string, { name: string; symbol: string; price: number; color: string }> = {
-  "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": { name: "USD Coin",   symbol: "USDC",  price: 1.0,       color: "#2775CA" },
-  "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB": { name: "Tether",     symbol: "USDT",  price: 1.0,       color: "#26A17B" },
-  "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN":  { name: "Jupiter",    symbol: "JUP",   price: 1.82,      color: "#1DC18A" },
-  "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263": { name: "Bonk",      symbol: "BONK",  price: 0.000024,  color: "#F7931A" },
-  "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm": { name: "dogwifhat", symbol: "WIF",   price: 2.14,      color: "#F4B4C8" },
-};
+import { usePortfolioData } from "@/hooks/portfolio/usePortfolioData";
+import { usePortfolioAnalytics } from "@/hooks/portfolio/usePortfolioAnalytics";
 
 // Stat card icons
 function BriefcaseIcon() {
@@ -80,79 +65,8 @@ export function DashboardContent() {
   const { publicKey, connected } = useWallet();
   const { connection } = useConnection();
 
-  const [solBalance, setSolBalance] = useState<number>(0);
-  const [tokens, setTokens] = useState<Array<{ mint: string; amount: number; decimals: number; address: string; name: string; symbol: string; price: number; color: string; usdValue: number }>>([]);
-  const [transactions, setTransactions] = useState<Array<{ signature: string; slot: number; blockTime: number | null | undefined; err: unknown; memo: string | null | undefined }>>([]);
-  const [grindScore, setGrindScore] = useState<GrindScoreData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const SOL_PRICE = 172.4;
-
-  useEffect(() => {
-    if (!connected) { setLoading(false); return; }
-    if (!publicKey) return;
-
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const [balance, tokenAccounts, txs] = await Promise.all([
-          getSolBalance(publicKey, connection),
-          getTokenAccounts(publicKey, connection),
-          getRecentTransactions(publicKey, 8, connection),
-        ]);
-        setSolBalance(balance);
-        const enrichedTokens = tokenAccounts
-          .map((t) => {
-            const meta = KNOWN_TOKENS[t.mint];
-            return {
-              ...t,
-              name: meta?.name || "Unknown Token",
-              symbol: meta?.symbol || t.mint.slice(0, 4),
-              price: meta?.price || 0,
-              color: meta?.color || "#6366f1",
-              usdValue: t.amount * (meta?.price || 0),
-            };
-          })
-          .sort((a, b) => b.usdValue - a.usdValue);
-        setTokens(enrichedTokens);
-        setTransactions(txs);
-        const score = calculateGrindScore({
-          solBalance: balance,
-          tokenCount: tokenAccounts.length,
-          txCount: txs.length * 10,
-        });
-        setGrindScore(score);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load wallet data. Try again or check your connection.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [publicKey, connected, connection]);
-
-
-  const totalUSD = solBalance * SOL_PRICE + tokens.reduce((s, t) => s + t.usdValue, 0);
-
-  const agentReport = useMemo(() => {
-    const allAssets: PortfolioAsset[] = [
-      { symbol: "SOL", usdValue: solBalance * SOL_PRICE, allocationPct: 0, volatilityBand: "medium" },
-      ...tokens.map((t) => ({
-        symbol: t.symbol,
-        usdValue: t.usdValue,
-        allocationPct: 0,
-        volatilityBand: t.symbol === "USDC" || t.symbol === "USDT" ? "low" as const : "high" as const,
-      })),
-    ];
-
-    const total = allAssets.reduce((sum, a) => sum + a.usdValue, 0);
-    const normalized = allAssets.map((a) => ({ ...a, allocationPct: total > 0 ? (a.usdValue / total) * 100 : 0 }));
-    return generateAgentReport(normalized, transactions.length);
-  }, [solBalance, tokens, transactions.length]);
+  const { solBalance, solPrice, quoteMeta, tokens, transactions, loading, error } = usePortfolioData(publicKey, connected, connection);
+  const { totalUSD, grindScore, agentReport } = usePortfolioAnalytics(solBalance, solPrice, quoteMeta, tokens, transactions);
 
   const isDisconnected = !connected;
 
@@ -195,7 +109,7 @@ export function DashboardContent() {
 
   const statCards = [
     { label: "Total Portfolio Value", value: loading ? null : formatUSD(totalUSD), sub: "Net wallet value", Icon: BriefcaseIcon, highlight: true },
-    { label: "SOL Position", value: loading ? null : `${solBalance.toFixed(3)} SOL`, sub: loading ? "" : formatUSD(solBalance * SOL_PRICE), Icon: SolIcon },
+    { label: "SOL Position", value: loading ? null : `${solBalance.toFixed(3)} SOL`, sub: loading ? "" : formatUSD(solBalance * solPrice), Icon: SolIcon },
     { label: "Tracked Assets", value: loading ? null : tokens.length.toString(), sub: "SPL tokens", Icon: LayersIcon },
     { label: "Grind Score", value: loading ? null : grindScore?.score.toString() || "0", sub: grindScore?.tier || "", Icon: ZapIcon },
   ];
@@ -281,6 +195,13 @@ export function DashboardContent() {
           </div>
         )}
       </div>
+
+
+      {!loading && quoteMeta.fetchedAt !== new Date(0).toISOString() && (
+        <div style={{ color: "var(--color-text-muted)", fontSize: "var(--text-xs)", marginTop: "-8px" }}>
+          Quotes: {quoteMeta.source} · {new Date(quoteMeta.fetchedAt).toLocaleTimeString()} {quoteMeta.isFallback ? "(fallback)" : ""}
+        </div>
+      )}
 
       {/* Error */}
       {error && (
@@ -374,7 +295,7 @@ export function DashboardContent() {
         className="lg:grid-cols-3"
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }} className="lg:col-span-2">
-          <TokenList tokens={tokens} solBalance={solBalance} solPrice={SOL_PRICE} loading={loading} />
+          <TokenList tokens={tokens} solBalance={solBalance} solPrice={solPrice} loading={loading} />
           <ActivityFeed transactions={transactions} loading={loading} />
           <AgentOpsPanel report={agentReport} loading={loading} />
         </div>
