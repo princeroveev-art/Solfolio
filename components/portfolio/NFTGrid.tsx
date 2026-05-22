@@ -62,7 +62,7 @@ export function NFTGrid({ loading }: NFTGridProps) {
         <span className="tag-muted">Mock data</span>
       </div>
 
-      <div style={{ padding: "16px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+      <div className="p-4 grid grid-cols-2 sm:grid-cols-2 gap-3">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => (
               <div
@@ -74,11 +74,12 @@ export function NFTGrid({ loading }: NFTGridProps) {
           : MOCK_NFTS.map((nft) => (
               <div
                 key={nft.id}
+                className="card"
                 style={{
                   borderRadius: "var(--radius-md)",
                   overflow: "hidden",
-                  background: "rgba(124,58,237,0.1)",
-                  border: "1px solid var(--color-border)",
+                  background: "linear-gradient(170deg, rgba(139,92,246,0.12), rgba(59,130,246,0.08))",
+                  border: "1px solid rgba(139,92,246,0.25)",
                   cursor: "pointer",
                   transition: "border-color var(--transition-base), box-shadow var(--transition-base)",
                 }}
