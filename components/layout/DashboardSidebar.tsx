@@ -6,10 +6,11 @@ import { usePathname } from "next/navigation";
 import { WalletButton } from "@/components/wallet/WalletButton";
 
 const links = [
-  { href: "/dashboard", label: "Overview" },
+  { href: "/", label: "Home" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard", label: "Wallet" },
   { href: "/dashboard", label: "AI Insights" },
-  { href: "/dashboard", label: "Activity" },
-  { href: "/", label: "Back to Home" },
+  { href: "/dashboard", label: "Settings" },
 ];
 
 export function DashboardSidebar() {
@@ -18,8 +19,8 @@ export function DashboardSidebar() {
   return (
     <aside className="dashboard-sidebar glass">
       <div className="sidebar-brand">
-        <Image src="/solfoliologo.png" alt="Solfolio" width={150} height={42} priority />
-        <p className="sidebar-subtitle">Portfolio Intelligence Terminal</p>
+        <Image src="/solfoliologo.png" alt="Solfolio" width={152} height={42} priority />
+        <p className="sidebar-subtitle">AI Solana Intelligence</p>
       </div>
 
       <nav className="sidebar-nav">

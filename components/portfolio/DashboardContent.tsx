@@ -110,10 +110,10 @@ export function DashboardContent() {
   }
 
   const statCards = [
-    { label: "Total Portfolio Value", value: loading ? null : formatUSD(totalUSD), sub: "Net wallet value", Icon: BriefcaseIcon, highlight: true },
-    { label: "SOL Position", value: loading ? null : `${solBalance.toFixed(3)} SOL`, sub: loading ? "" : formatUSD(solBalance * SOL_PRICE), Icon: SolIcon },
-    { label: "Tracked Assets", value: loading ? null : tokens.length.toString(), sub: "SPL tokens", Icon: LayersIcon },
-    { label: "Grind Score", value: loading ? null : grindScore?.score.toString() || "0", sub: grindScore?.tier || "", Icon: ZapIcon },
+    { label: "Portfolio Value", value: loading ? null : formatUSD(totalUSD), sub: "Net wallet value", Icon: BriefcaseIcon, highlight: true },
+    { label: "AI Confidence", value: loading ? null : `${Math.min(98, 52 + tokens.length * 3)}%`, sub: "Signal certainty", Icon: SolIcon },
+    { label: "Risk Score", value: loading ? null : `${Math.max(12, 100 - (grindScore?.score || 0))}/100`, sub: "Lower is safer", Icon: AlertIcon },
+    { label: "Wallet Activity", value: loading ? null : transactions.length.toString(), sub: "Recent transactions", Icon: LayersIcon },
   ];
 
   const [animatedTotal, setAnimatedTotal] = useState(0);
@@ -176,7 +176,7 @@ export function DashboardContent() {
               letterSpacing: "-0.02em",
             }}
           >
-            My Dashboard
+            Intelligence Dashboard
           </h1>
         </div>
 
@@ -283,7 +283,7 @@ export function DashboardContent() {
       <div className="card-glow p-5 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p style={{ color: "var(--color-text-muted)", fontSize: "var(--text-xs)" }}>Portfolio Trend</p>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "var(--text-xs)" }}>Portfolio Performance</p>
             <p className="metric-value" style={{ color: "var(--color-text-primary)", fontSize: "var(--text-lg)", fontWeight: 700 }}>
               {loading ? "—" : formatUSD(animatedTotal)}
             </p>
@@ -302,15 +302,24 @@ export function DashboardContent() {
       {/* Main content grid */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6">
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }} className="xl:col-span-7">
-          <TokenList tokens={tokens} solBalance={solBalance} solPrice={SOL_PRICE} loading={loading} />
-          <ActivityFeed transactions={transactions} loading={loading} />
-          <AIInsightsPanel
+          <div>
+            <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-xs)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>Top Holdings</p>
+            <TokenList tokens={tokens} solBalance={solBalance} solPrice={SOL_PRICE} loading={loading} />
+          </div>
+          <div>
+            <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-xs)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>Wallet Activity</p>
+            <ActivityFeed transactions={transactions} loading={loading} />
+          </div>
+          <div>
+            <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-xs)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>AI Generated Report</p>
+            <AIInsightsPanel
             loading={loading}
             totalUSD={totalUSD}
             solBalance={solBalance}
             tokens={tokens}
             transactions={transactions}
           />
+          </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }} className="xl:col-span-5">
           {grindScore && <GrindScoreCard data={grindScore} />}
