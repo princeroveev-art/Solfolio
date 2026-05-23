@@ -132,7 +132,7 @@
 @layer components {
   .card {
     background: linear-gradient(170deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
-    border: 1px solid color-mix(in srgb, var(--color-border) 80%, rgba(255,255,255,0.2));
+    border: 1px solid rgba(148, 163, 184, 0.16);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.08);
     backdrop-filter: blur(18px);
