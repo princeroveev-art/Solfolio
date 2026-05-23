@@ -486,7 +486,11 @@ footer a:hover {
   background:
     linear-gradient(120deg, rgba(15, 23, 42, 0.8), rgba(88, 28, 135, 0.28), rgba(30, 64, 175, 0.35)),
     radial-gradient(circle at 0% 0%, rgba(255,255,255,0.2), transparent 30%);
+ codex/transform-solfolio-into-premium-ai-platform-m62q8i
   border-bottom: 1px solid rgba(99, 102, 241, 0.30);
+
+  border-bottom: 1px solid color-mix(in srgb, var(--color-brand) 30%, var(--color-border));
+ main
 }
 
 .ai-terminal-pill {
@@ -503,7 +507,11 @@ footer a:hover {
 
 .ai-insight-card {
   background: linear-gradient(160deg, rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.38));
+codex/transform-solfolio-into-premium-ai-platform-m62q8i
   border: 1px solid rgba(129, 140, 248, 0.38);
+
+  border: 1px solid color-mix(in srgb, var(--color-border-strong) 75%, rgba(129, 140, 248, 0.45));
+ main
   border-radius: 14px;
   padding: 14px;
   backdrop-filter: blur(12px);
@@ -517,11 +525,18 @@ footer a:hover {
 
 .ai-report-shell {
   border-radius: 14px;
+ codex/transform-solfolio-into-premium-ai-platform-m62q8i
   border: 1px solid rgba(148, 163, 184, 0.26);
+
+  border: 1px solid color-mix(in srgb, var(--color-border-strong) 70%, rgba(148,163,184,.2));
+main
   padding: 16px;
   background: linear-gradient(180deg, rgba(2, 6, 23, 0.8), rgba(15, 23, 42, 0.45));
 }
 .stream-line { animation: fadeSlideUp .45s ease; }
+ codex/transform-solfolio-into-premium-ai-platform-m62q8i
+codex/transform-solfolio-into-premium-ai-platform-tp69pq
+ main
 
 .dashboard-layout {
   display: flex;
@@ -544,7 +559,11 @@ footer a:hover {
   flex-direction: column;
   justify-content: space-between;
   background: linear-gradient(175deg, rgba(15, 23, 42, 0.78), rgba(9, 12, 28, 0.84));
+ codex/transform-solfolio-into-premium-ai-platform-m62q8i
   border: 1px solid rgba(129, 140, 248, 0.30);
+
+  border: 1px solid color-mix(in srgb, var(--color-border-strong) 65%, rgba(129, 140, 248, 0.24));
+ main
   box-shadow: 0 12px 40px rgba(3, 8, 24, 0.45), 0 0 20px rgba(99, 102, 241, 0.08);
 }
 
@@ -582,3 +601,7 @@ footer a:hover {
   }
   .sidebar-nav { display: grid; grid-template-columns: 1fr 1fr; }
 }
+ codex/transform-solfolio-into-premium-ai-platform-m62q8i
+
+ main
+ main
