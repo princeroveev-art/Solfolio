@@ -27,14 +27,29 @@ export function Navbar() {
         }}
       >
         <Link href="/" className="flex items-center" style={{ textDecoration: "none" }}>
-          <Image
-            src="/solfoliologo.png"
-            alt="Solfolio Logo"
-            width={170}
-            height={44}
-            priority
-            style={{ width: "170px", height: "auto", filter: "drop-shadow(0 0 14px rgba(139,92,246,0.55))" }}
-          />
+          <div
+            className="relative rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5"
+            style={{
+              background:
+                "radial-gradient(circle at 24% 34%, rgba(167,139,250,0.36), rgba(167,139,250,0.06) 45%, transparent 72%), radial-gradient(circle at 78% 62%, rgba(74,222,128,0.3), rgba(74,222,128,0.06) 46%, transparent 74%), rgba(13,14,35,0.62)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 0 24px rgba(139,92,246,0.22), inset 0 0 18px rgba(34,197,94,0.08)",
+              backdropFilter: "blur(7px)",
+            }}
+          >
+            <Image
+              src="/solfoliologo.png"
+              alt="Solfolio Logo"
+              width={220}
+              height={58}
+              priority
+              className="w-[170px] sm:w-[210px] h-auto"
+              style={{
+                filter:
+                  "brightness(1.22) contrast(1.14) saturate(1.08) drop-shadow(0 0 14px rgba(139,92,246,0.45)) drop-shadow(0 0 9px rgba(74,222,128,0.28))",
+              }}
+            />
+          </div>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
