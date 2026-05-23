@@ -72,6 +72,22 @@ export function DashboardContent() {
 
   const isDisconnected = !connected;
 
+  const [animatedTotal, setAnimatedTotal] = useState(0);
+  useEffect(() => {
+    if (isDisconnected || loading) return;
+    const target = Math.max(0, totalUSD);
+    const start = performance.now();
+    const duration = 850;
+    let raf = 0;
+    const tick = (now: number) => {
+      const progress = Math.min(1, (now - start) / duration);
+      setAnimatedTotal(target * (1 - Math.pow(1 - progress, 3)));
+      if (progress < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [isDisconnected, loading, totalUSD]);
+
   if (isDisconnected) {
     return (
       <div
@@ -116,21 +132,6 @@ export function DashboardContent() {
     { label: "Wallet Activity", value: loading ? null : transactions.length.toString(), sub: "Recent transactions", Icon: LayersIcon },
   ];
 
-  const [animatedTotal, setAnimatedTotal] = useState(0);
-  useEffect(() => {
-    if (loading) return;
-    const target = Math.max(0, totalUSD);
-    const start = performance.now();
-    const duration = 850;
-    let raf = 0;
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - start) / duration);
-      setAnimatedTotal(target * (1 - Math.pow(1 - progress, 3)));
-      if (progress < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [loading, totalUSD]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-5 sm:gap-6">
