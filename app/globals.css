@@ -635,3 +635,20 @@ radial-gradient(circle at 50% 95%, rgba(59,130,246,.18), transparent 42%); }
 .sf-kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#d8b4fec2}
 .sf-action-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}.sf-action-btn{padding:11px 13px;text-align:left;border-radius:12px;border:1px solid rgba(196,181,253,.28);background:rgba(139,92,246,.1);color:white}
 @media (max-width: 1080px){.sf-shell{grid-template-columns:1fr;padding:14px}.dashboard-sidebar{position:relative;height:auto;top:0}.sf-content-wrap{padding:0}}
+
+/* Unified shell nav consistency patch */
+.sf-shell { position: relative; z-index: 1; }
+.sf-sidebar-desktop { display: block; }
+.sf-topbar { position: sticky; top: 14px; z-index: 10; border-radius: 16px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.sf-menu-btn { display: none; border: 1px solid rgba(255,255,255,.2); border-radius: 10px; padding: 6px 10px; background: rgba(255,255,255,.06); }
+.sf-drawer-wrap { position: fixed; inset: 0; z-index: 60; }
+.sf-drawer-backdrop { position: absolute; inset: 0; background: rgba(3,4,12,.68); }
+.sf-drawer-panel { position: absolute; left: 0; top: 0; bottom: 0; width: min(88vw, 320px); padding: 12px; }
+
+@media (max-width: 1080px) {
+  .sf-sidebar-desktop { display: none; }
+  .sf-menu-btn { display: inline-flex; }
+  .sf-content-wrap { padding: 0; }
+  .sf-topbar { margin-bottom: 12px; }
+  .sf-drawer-panel .dashboard-sidebar { position: relative; top: 0; height: 100%; }
+}

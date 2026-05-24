@@ -1,29 +1,26 @@
 import Link from "next/link";
-import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppShell } from "@/components/layout/AppShell";
 
 const features = [
-  { title: "Operator Cockpit", desc: "Mission-control dashboard for portfolio exposure, on-chain behavior, and AI agent actions." },
-  { title: "AI Agent Command", desc: "From macro sentiment to token-level risk, get actionable AI Agent guidance." },
-  { title: "Wallet Control", desc: "Monitor wallet status, copy/export addresses, explorer links, and RPC health." },
-  { title: "Unified Design", desc: "Landing, dashboard, wallet, agent, and settings share one premium tactile system." },
+  { title: "Operator Cockpit", desc: "Mission-control dashboard for exposure, on-chain behavior, and AI operations." },
+  { title: "AI Agent Command", desc: "Get AI summarized research signals and portfolio operator recommendations." },
+  { title: "Wallet Control", desc: "Operational actions for connected wallets with clear status and utility tools." },
+  { title: "Solana Intel", desc: "Track trending projects, whale activity, token momentum, and launch signals." },
 ];
 
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      <AnimatedBackground />
-      <Navbar />
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-36 pb-20">
+    <AppShell>
+      <section className="relative z-10 mx-auto max-w-7xl px-2 pb-20 pt-4 sm:px-4">
         <div className="landing-hero">
-          <p className="text-xs tracking-[0.28em] uppercase text-violet-200/80">Solfolio · AI Agent System</p>
-          <h1 className="text-4xl sm:text-6xl font-bold mt-4 leading-tight">Cinematic Solana portfolio command center for serious Web3 operators.</h1>
+          <p className="text-xs tracking-[0.28em] uppercase text-violet-200/80">Solfolio · Unified Dashboard System</p>
+          <h1 className="text-4xl sm:text-6xl font-bold mt-4 leading-tight">One stable premium command center for Solana operators.</h1>
           <p className="mt-5 max-w-3xl text-sm sm:text-base text-white/75 leading-7">
-            Solfolio combines portfolio intelligence, wallet operations, and AI Agent orchestration into one premium dark workspace with tactile glass surfaces.
+            Home is now part of the same shell as Dashboard, Portfolio, Wallet, AI Agent, and Intel so your navigation stays fixed and predictable.
           </p>
           <div className="flex flex-wrap gap-3 mt-8">
             <Link href="/dashboard" className="btn-primary">Open Dashboard</Link>
-            <Link href="/ai" className="btn-ghost">AI Agent Command Center</Link>
+            <Link href="/intel" className="btn-ghost">Open Intel Surface</Link>
           </div>
         </div>
 
@@ -36,6 +33,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-    </main>
+    </AppShell>
   );
 }
