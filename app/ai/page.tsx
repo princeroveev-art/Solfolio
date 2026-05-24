@@ -84,7 +84,7 @@ export default function AIPage() {
             <p className="mt-3 text-xs text-white/60">Wallet: {connected && publicKey ? shortenAddress(publicKey.toBase58(), 6) : "Not connected"} · Tracked Value: {loading ? "—" : formatUSD(totalUSD)}</p>
           </section>
 
-codex/redesign-entire-app-for-premium-ui
+
           <section className="sf-panel xl:col-span-7">
             <p className="sf-kicker">Solana Intelligence Assistant (Demo UX)</p>
             <div className="space-y-3">
@@ -107,18 +107,8 @@ codex/redesign-entire-app-for-premium-ui
             </div>
           </section>
 
-      <section className="relative z-10 mx-auto max-w-6xl px-4 pb-14 pt-32 sm:px-6">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/80 to-black/40 p-8 shadow-[0_30px_120px_rgba(8,8,20,0.45)] backdrop-blur-xl sm:p-10">
-          <p className="text-xs uppercase tracking-[0.3em] text-cyan-300/90">Solfolio AI Agent</p>
-          <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl" style={{ fontFamily: "var(--font-syne)" }}>
-            AI Agent Command Center
-          </h1>
-          <p className="mt-4 max-w-3xl text-sm leading-6 sm:text-base" style={{ color: "var(--color-text-secondary)" }}>
-            Monitor Solana market news, ecosystem momentum, NFT activity, DeFi/token trends, and protocol risk alerts in one premium intelligence surface.
-          </p>
-          <p className="mt-3 text-xs text-white/50">Status: {feed ? formatUpdatedAt(feed) : "Initializing"}</p>
-        </div>
- premium-dashboard-redesign
+  
+
 
           <section className="sf-panel xl:col-span-6">
             <p className="sf-kicker">Action Queue</p>
