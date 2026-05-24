@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppShell } from "@/components/layout/AppShell";
 import { usePortfolioData } from "@/hooks/portfolio/usePortfolioData";
 import { usePortfolioAnalytics } from "@/hooks/portfolio/usePortfolioAnalytics";
 import { formatUSD, shortenAddress } from "@/lib/solana";
@@ -72,10 +71,8 @@ export default function AIPage() {
       ];
 
   return (
-    <main className="relative min-h-screen">
-      <AnimatedBackground />
-      <Navbar />
-      <section className="relative z-10 mx-auto max-w-7xl px-4 pb-14 pt-32 sm:px-6">
+    <AppShell>
+      <section className="relative z-10 mx-auto max-w-7xl px-2 pb-14 pt-4 sm:px-4">
         <div className="sf-main-grid">
           <section className="sf-panel xl:col-span-12">
             <p className="sf-kicker">Solfolio AI Agent</p>
@@ -133,6 +130,6 @@ export default function AIPage() {
           </section>
         </div>
       </section>
-    </main>
+    </AppShell>
   );
 }
