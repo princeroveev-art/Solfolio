@@ -23,7 +23,7 @@ export function AppShell({ children }: AppShellProps) {
       <div className="sf-content-wrap">
         <header className="sf-topbar glass">
           <button className="sf-menu-btn" type="button" onClick={() => setMobileOpen(true)} aria-label="Open navigation">
-            ☰
+        
           </button>
           <div className="flex items-center gap-3">
 codex/fix-navigation-and-app-consistency
