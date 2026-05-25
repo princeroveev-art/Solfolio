@@ -19,7 +19,10 @@ export function DashboardSidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <aside className="dashboard-sidebar glass">
       <div className="sidebar-brand">
-        <Image src="/solfolio.png" alt="Solfolio" width={152} height={42} priority />
+        <div className="sidebar-brand-frame">
+          <Image src="/solfolio.png" alt="Solfolio" width={196} height={54} priority className="sidebar-brand-logo" />
+          <p className="sidebar-brand-tag">Intelligence Terminal</p>
+        </div>
       </div>
 
       <nav className="sidebar-nav">
