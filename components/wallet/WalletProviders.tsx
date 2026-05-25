@@ -8,7 +8,15 @@ import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export function WalletProviders({ children }: { children: ReactNode }) {
-  const endpoint = useMemo(() => process.env.NEXT_PUBLIC_RPC_URL ?? "https://api.mainnet-beta.solana.com", []);
+  const endpoint = useMemo(() => {
+    const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL;
+
+    if (!rpcUrl) {
+      throw new Error("Missing NEXT_PUBLIC_RPC_URL");
+    }
+
+    return rpcUrl;
+  }, []);
 
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
